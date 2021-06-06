@@ -1,1 +1,195 @@
-Nic tu nie ma!
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projekt - Damian Patyk</title>
+
+  <style>
+
+    body {
+      min-height: 100vh;
+      background-color: #433d3c;
+      background-position: calc(100% + 150px) calc(100% + 50px);
+    }
+
+    h1,h2 {
+      color: #c06014;
+      font-size: 2em;
+      margin-bottom: 0px;
+      
+    }
+
+    h2{
+        font-size: 1.5em;
+    }
+
+    hr {
+      border: 1px solid #c06014;
+      margin: 2rem 0px;
+    }
+
+    label {
+      margin-bottom: 2rem;
+      color: #d8b384;
+      font-size: 1.5rem;
+    }
+    
+    span {
+      display: block;
+      color: #f0e3ca;
+      font-size: 1rem;
+    }
+
+    input,button {
+      display: block;
+      font-size: 2rem;
+      padding: 10px;
+      border: 3px solid #c06014;
+      margin: 1rem 0 1rem 0;
+      background-color: #f7f3e9;
+      width: calc(100% - 65px);
+    }
+
+    button {
+      color: #f7f3e9;
+      border: 3px solid #f7f3e9;
+      background-color: #c06014;
+      width: calc(50%);
+      margin: 2rem auto;
+    }
+
+    #output {
+      background-color: #655f5e;
+      color: #f0e3ca;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    footer p {
+        font-size: 1.5rem;
+        text-align: center;
+        color: #c06014;
+    }
+
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Bezpieczeństwo w systemach i sieciach komputerowych</h1>
+    <h2>Implementacja algorytmu kryptograficznego: Szyfr Cezara</h2>
+
+    <hr>
+
+    <label for="message">Twoja wiadomość</label>
+    <span>Wiadomość może zawierać wyłącznie małe litery oraz spacje. Inne znaki zostaną usunięte lub zastąpione!</span>
+    <input id="message" type="text" value="szyfr cezara">
+    
+    <label for="shift">Przesunięcie</label>
+    <span>Pole przyjmuje wyłącznie cyfry oraz znak "-". Maksymalne przesuniecie wynosi 26.</span>
+    <input id="shift" value="1">
+
+    <button type="button" id="button" onclick="startEncryption()">Szyfruj / Deszfruj</button> 
+    <hr>
+
+    <label for="output">Wynik</label>
+    <input id="output" type="text" value="" readonly>
+
+</main>
+<footer>
+    <p>Autor: Damian Patyk (nr albumu 102872)</p>
+    
+</footer>
+  <script>
+
+    var inputMessage = document.getElementById("message");
+    var inputShift = document.getElementById("shift");
+    var output = document.getElementById("output");
+
+    var originalMessage = inputMessage.value;
+
+    function fixMessage(inputMessage) {
+      var toLowerCase = inputMessage.toLowerCase();
+      var regexReplace = toLowerCase.replace(/[^a-z\s]/g, "");
+
+      if (regexReplace != inputMessage) {
+        alert ("Nieobsługiwane znaki zostały zastąpione.");
+      }
+
+      document.getElementById("message").value = regexReplace;
+
+      return regexReplace;
+
+    }
+
+    function fixShift(inputShift) {
+
+        if (inputShift >= -26 && inputShift <= 26) {
+
+            return inputShift;
+
+        }else{ 
+
+            alert ("Wprowadzono nieporpawną wartość dla przesuniecia! Ustawiam 0!");
+            document.getElementById("shift").value = 0;
+            return 0;
+        }
+
+    }
+
+    function startEncryption() {
+        var caesarMessage = "";
+        var originalMessage = fixMessage(inputMessage.value);
+        
+        var shift = fixShift(inputShift.value);
+
+      for (letter of originalMessage) {
+
+          if (letter == " ") {
+
+            caesarMessage += " ";
+
+          }else {
+
+            caesarMessage += shiftLetter(letter, shift);
+
+          }
+        
+      }
+
+      output.value = caesarMessage;
+    }
+
+    function shiftLetter(letter, shift) {
+
+      var newLetter = "";
+
+      var letterCode = letter.charCodeAt(0);
+      var newLetterCode = letterCode + (shift % 26);
+
+
+      if (newLetterCode < 97) {
+
+        newLetterCode += 26;
+
+      } else if (newLetterCode > 122) {
+
+        newLetterCode -= 26;
+
+      }
+
+      newLetter = String.fromCharCode(newLetterCode);
+
+      return newLetter;
+    }
+  
+
+  </script>
+</body>
+
+</html>
